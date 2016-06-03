@@ -1,0 +1,852 @@
+<?php 
+/*
+* hook menu()
+*/
+function wysos_menu(){
+	$items = array();
+	
+	
+	$items['wysos/suite/next_available'] = array(
+		'title' => t('Next Available Suite'),
+		'page callback' => 'wysos_suite_next_available',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/cleanup'] = array(
+		'title' => t('Cleanup Virtual Offices'),
+		'page callback' => 'wysos_suite_cleanup',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+/*
+	$items['wysos/maintenance2'] = array(
+		'title' => t('WY SoS Maintenance'),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('form_wysos_configure'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.admin.inc',
+		'type' => MENU_NORMAL_ITEM
+	);
+	
+*/
+	/* Virtual Office 2 */
+	$items['wysos/virtualoffice/email_signup/%'] = array(
+		'title' => t(''),
+		'page callback' => 'wysos_virtualoffice_email_for_signup',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.virtualoffice.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['wysos/telassistant/create'] = array(
+		'title' => t('Create Telassistant Suite'),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_telassistant_new_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.telassistant.inc',
+		'type' => MENU_NORMAL_ITEM
+	);
+	$items['mail/override'] = array(
+		'title' => t(''),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_mail_override_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_NORMAL_ITEM
+	);
+	$items['mail/override/%'] = array(
+		'title' => t(''),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_mail_override_form',2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_NORMAL_ITEM
+	);
+	
+	/*
+	$items['chargify/subscription/create/%'] = array(
+		'title' => t('Create Subscription'),
+		'description' => 'Virtual Office Monthly',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_chargify_create_subscription_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.chargify.inc',
+		'type' => MENU_NORMAL_ITEM
+	);
+	*/
+
+/*	$items['chargify/email_signup/%'] = array(
+		'page callback' => 'wysos_chargify_email_for_signup',
+		'page arguments' => array(2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.chargify.inc',
+		'type' => MENU_CALLBACK,
+	);
+	*/
+	 
+/*	$items['chargify/signup_complete'] = array(
+		'page callback' => 'wysos_chargify_signup_complete',
+		'access callback' => TRUE,
+		'file' => 'wysos.chargify.inc',
+		'type' => MENU_CALLBACK,
+	);
+	*/
+	 
+/*	$items['chargify/subscription/view/%'] = array(
+		'title' => 'Chargify Subscription',
+		'description' => 'Chargify Subscription',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_chargify_subscription_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.virtualoffice.inc',
+		'type' => MENU_NORMAL_ITEM
+	);
+	*/
+	 
+/*	$items['wysos/virtual_office/month/list'] = array(
+		'title' => 'Virtual Office settings',
+		'description' => 'Virtual Office Monthly',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_virtual_office_monthly_list_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.virtualoffice.inc',
+		'type' => MENU_NORMAL_ITEM
+	);
+	*/
+	 
+	/*	$items['wysos/maintenance'] = array(
+			'title' => 'Virtual Office settings',
+			'description' => 'Virtual Office Settings',
+			'page callback' => 'drupal_get_form',
+			'page arguments' => array('wysos_virtual_office_admin'),
+			'access arguments' => array('administer users'),
+			'file' => 'wysos.virtualoffice.inc',
+			'type' => MENU_NORMAL_ITEM
+		);
+	*/
+	
+	/* PayPal */
+	$items['wysos/paypal/import'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_paypal_import_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.paypal.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/paypal/reconcile/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_paypal_reconcile_form', 3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.paypal.inc',
+		'type' => MENU_CALLBACK,
+	);
+	
+	/*	$items['wysos/paypal/vterminal'] = array(
+			'page callback' => 'drupal_get_form',
+			'page arguments' => array('wysos_paypal_vterminal_form'),
+			'access arguments' => array('administer users'),
+			'file' => 'wysos.paypal.inc',
+			'type' => MENU_CALLBACK,
+		); */
+		
+	/*	$items['wysos/paypal/vterminal2'] = array(
+			'page callback' => 'wysos_paypal_vterminal',
+			'access arguments' => array('administer users'),
+			'file' => 'wysos.paypal.inc',
+			'type' => MENU_CALLBACK,
+		);
+	*/
+	
+	$items['wysos/paypal/pay_invoice'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_paypal_pay_invoice_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.paypal.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/paypal/pay_invoice/%'] = array(
+		'page callback' => 'wysos_paypal_pay_invoiceno',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.paypal.inc',
+		'type' => MENU_CALLBACK,
+	);
+	/* 29dollaragent */
+	$items['wysos/29dollar/new_user'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_29dollar_new_user_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.29dollar.inc',
+		'type' => MENU_CALLBACK,
+	);
+	/* Scrape */
+	
+	/*	$items['wysos/scrape/test'] = array(
+			'page callback' => 'drupal_get_form',
+			'page arguments' => array('wysos_scrape_test_form'),
+			'access arguments' => array('administer users'),
+			'file' => 'wysos.scrape.inc',
+			'type' => MENU_CALLBACK,
+		);
+	*/
+
+	/* Affiliate RA */
+	$items['wysos/affiliate_ra'] = array(
+		'page callback' => 'wysos_affiliate_ra_summary',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.affiliate_ra.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/affiliate_ra/entities/%'] = array(
+		'page arguments' => array('wysos_affiliate_ra_entities_form',3),
+		'page callback' => 'drupal_get_form',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.affiliate_ra.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/affiliate_ra/entities/%/%'] = array(
+		'page arguments' => array('wysos_affiliate_ra_entities_form',3,4),
+		'page callback' => 'drupal_get_form',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.affiliate_ra.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/affiliate_ra/entities/%/%/%'] = array(
+		'page arguments' => array('wysos_affiliate_ra_entities_form',3,4,5),
+		'page callback' => 'drupal_get_form',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.affiliate_ra.inc',
+		'type' => MENU_CALLBACK,
+	);
+	/* Affiliate MF */
+	$items['wysos/affiliate_mf'] = array(
+		'page callback' => 'wysos_affiliate_mf_summary',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.affiliate_mf.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/affiliate_mf/list/%'] = array(
+		'page arguments' => array('wysos_affiliate_mf_list_form',3),
+		'page callback' => 'drupal_get_form',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.affiliate_mf.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/affiliate_mf/add/%'] = array(
+		'page arguments' => array('wysos_affiliate_mf_add_form',3),
+		'page callback' => 'drupal_get_form',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.affiliate_mf.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/affiliate_mf/create_invoice/%'] = array(
+		'page callback' => 'wysos_affiliate_mf_create_invoice',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.affiliate_mf.inc',
+		'type' => MENU_CALLBACK,
+	);
+	/* INCORP */
+	$items['wysos/incorp/order/mail_only'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_incorp_mail_only_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.incorp.inc',
+		'type' => MENU_CALLBACK,
+	);
+	/* Shelf */
+	$items['wysos/shelf/for_sale'] = array(
+		'title' => 'Shelf Companies For Sale',
+		'page callback' => 'wysos_shelf_for_sale',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.shelf.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/shelf/list'] = array(
+		'title' => 'Available Shelf Companies',
+		'page callback' => 'wysos_shelf_list',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.shelf.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/shelf/add_product/%'] = array(
+		'page callback' => 'wysos_shelf_add_product',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.shelf.inc',
+		'type' => MENU_CALLBACK,
+	);
+	/* Batches */
+	$items['wysos/batch/list'] = array(
+		'page callback' => 'wysos_batch_list',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.batch.inc',
+		'type' => MENU_CALLBACK,
+	);
+	
+	/*	
+		$items['wysos/batch/pdf/%'] = array(
+			'page callback' => 'wysos_batch_pdf',
+			'page arguments' => array(3),
+			'access arguments' => array('administer users'),
+			'file' => 'wysos.batch.inc',
+			'type' => MENU_CALLBACK,
+		);
+	*/
+
+	/* Offices */
+	$items['wysos/office/apply/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_office_apply_form',3),
+		'access callback' => TRUE,
+		'file' => 'wysos.office.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['wysos/office/available'] = array(
+		'page callback' => 'wysos_office_available',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.office.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/office'] = array(
+		'page callback' => 'wysos_office_list',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.office.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/office/create_invoice/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_office_create_invoice_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.office.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['wysos/office/lease_form/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_office_lease_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.office.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['wysos/office/lease_form'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_office_lease_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.office.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['renew'] = array(
+		'title' => 'Renew Company',
+		'page callback' => 'wysos_renew_entity',
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['renew/%'] = array(
+		'title' => 'Renew Company',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_renewal_form3',1),
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK,
+	);
+	
+/*	$items['wysos/renewal/list'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_renewal_list_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.renewal.inc',
+		'type' => MENU_CALLBACK,
+	);
+	*/
+	 
+/*	$items['wysos/renewal/list/%/%'] = array(
+		'title' => 'Renew Company',
+		'page callback' => 'wysos_renewal_list',
+		'page arguments' => array(3,4),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.renewal.inc',
+		'type' => MENU_CALLBACK,
+	);
+	*/
+	 
+	$items['wysos/renewal_form_calc'] = array(
+		'page callback' => 'wysos_renewal_form_calc',
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK,
+	);
+	// not available
+		$items['wysos/renewal/submit_ar'] = array(
+			'page callback' => 'wysos_renewal_submit_ar',
+			'access callback' => TRUE,
+			'file' => 'wysos.pay.inc',
+			'type' => MENU_CALLBACK,
+		);	
+	$items['pay'] = array(
+		'title' => 'Pay Your Bill',
+		'page callback' => 'wysos_pay',
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['pay_invoice/%'] = array(
+		'title' => 'Pay Your Bill',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_pay_invoice_form',1),
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK,
+	);
+/*	$items['pay_vo_invoice/%/%'] = array(
+		'title' => 'Pay Your Virtual Office Bill',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_pay_vo_invoice_form',1,2),
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK,
+	);
+	*/
+	
+	$items['payment_done/%'] = array(
+		'title' => 'Payment Complete',
+		'page callback' => 'wysos_payment_done',
+		'page arguments' => array(1),
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['pay/%'] = array(
+		'title' => 'Pay for an Order/Invoice',
+		'page callback' => 'wysos_pay_order',
+		'page arguments' => array(1),
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK,
+	);
+	
+/*	$items['pay2/%'] = array(
+		'title' => 'Pay for an Order/Invoice',
+		'page callback' => 'wysos_pay_order2',
+		'page arguments' => array(1),
+		'access callback' => TRUE,
+		'file' => 'wysos.pay.inc',
+		'type' => MENU_CALLBACK,
+	);
+	*/
+	 
+/* Workfolw */
+	$items['wysos/workflow/list/%'] = array(
+		'title' => '',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_workflow_list_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.workflow.inc',
+		'type' => MENU_CALLBACK,
+	);
+	// not available	
+		$items['wysos/workflow/articles/%'] = array(
+			'page callback' => 'wysos_workflow_articles',
+			'page arguments' => array(3),
+			'access arguments' => array('administer users'),
+			'file' => 'wysos.workflow.inc',
+			'type' => MENU_CALLBACK,
+		);
+	$items['wysos/workflow/articles/%/%'] = array(
+		'page callback' => 'wysos_workflow_articles2',
+		'page arguments' => array(3,4),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.workflow.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/workflow/resolutions/%'] = array(
+		'page callback' => 'wysos_workflow_resolutions',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.workflow.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite_no/autocomplete'] = array(
+		'page callback' => 'wysos_autocomplete_suite_no_lookup',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/full_name/autocomplete'] = array(
+		'page callback' => 'wysos_autocomplete_person_lookup',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/email/autocomplete'] = array(
+		'title' => t('Email autocomplete'),
+		'page callback' => 'wysos_email_autocomplete',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/email_user/autocomplete'] = array(
+		'page callback' => 'wysos_email_user_autocomplete',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/autocomplete/client_company'] = array(
+		'page callback' => 'wysos_autocomplete_client_company',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/autocomplete/all_companies'] = array(
+		'page callback' => 'wysos_autocomplete_all_companies',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/entity/autocomplete'] = array(
+		'page callback' => 'wysos_entity_search_autocomplete',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	); 
+	$items['wysos/filing/autocomplete'] = array(
+		'title' => t('filing name autocomplete'),
+		'page callback' => 'wysos_filing_autocomplete',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/mail/lookup/autocomplete'] = array(
+		'page callback' => 'wysos_autocomplete_mail_lookup',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/reinstate/autocomplete'] = array(
+		'page callback' => 'wysos_reinstate_autocomplete',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.autocomplete.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/search'] = array(
+		'title' => 'Search WyomingRegisteredAgent.com, Inc.',
+		'page callback' => 'wysos_search',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.search.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/search/%'] = array(
+		'title' => 'Search WyomingRegisteredAgent.com, Inc.',
+		'page callback' => 'wysos_search',
+		'page arguments' => array(2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.search.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/search/form'] = array(
+		'title' => 'Search WyomingRegisteredAgent.com, Inc.',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_search_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.search.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/user/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_user_form',2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.user.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/user_company_add/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_user_company_add_form',2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.user.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/user_browse/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_user_form','browse',2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.user.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/user_nworder/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_user_new_order',2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.user.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/send_renewal_emails'] = array(
+		'title' => 'Send Renewal Emails',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_send_renewal_emails_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.email.inc',
+		'type' => MENU_CALLBACK,
+	);
+	
+	//Resolutions
+	$items['wysos/resolutions'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_resolution_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.resolutions.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/op_agreement'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_op_agreement_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.resolutions.inc',
+		'type' => MENU_CALLBACK,
+	);
+	// Annual Report
+	$items['wysos/ar_form'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_annual_report_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.annualreport.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/reinstate'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_reinstate_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.annualreport.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/reinstate/%'] = array(
+		'page callback' => 'wysos_reinstate',
+		'page arguments' => array(2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.annualreport.inc',
+		'type' => MENU_CALLBACK,
+	);
+	
+	$items['wysos/thankyou'] = array(
+		'title' => 'Thank you',
+		'page callback' => 'wysos_thankyou',
+		'access callback' => TRUE,
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/vo_wiz/add'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_vo_wiz_add_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.vo_wiz.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/vo_wiz/add/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_vo_wiz_add_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.vo_wiz.inc',
+		'type' => MENU_CALLBACK
+	);
+	
+	/* Suite */
+	$items['wysos/suite/program_adapter'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_suite_make_config_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/user_shipment'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_suite_user_shipment_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/new_shipment/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_suite_shipment_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/mail_lookup'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_suite_mail_lookup_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/mail'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_suite_filing_user_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/scan-envelope/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_suite_scan_envelope_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/upload-envelope/%'] = array(
+		'page callback' => 'wysos_suite_upload_envelope',
+		'page arguments' => array(3),
+		'access callback' => TRUE,
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/suspend/%'] = array(
+		'page callback' => 'wysos_suite_suspend',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/email_vo_due/%/%'] = array(
+		'page callback' => 'wysos_suite_email_vo_due',
+		'page arguments' => array(3,4),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite'] = array(
+		'title' => 'WY SoS Filings',
+		'page callback' => 'wysos_suite',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/suspend/%'] = array(
+		'page callback' => 'wysos_suite_suspend',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/suite/instructions/%'] = array(
+		'page callback' => 'wysos_suite_instructions',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.suite.inc',
+		'type' => MENU_CALLBACK,
+	);
+	
+	//Import Orders
+	$items['wysos/order_import'] = array(
+		'title' => 'Import www.wyomingregisteredagent.com Orders',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_order_import_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.order.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['wysos/order_import/%'] = array(
+		'title' => 'Import www.wyomingregisteredagent.com Orders',
+		'page callback' => 'wysos_order_import_view',
+		'page arguments' => array(2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.order.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['wysos/order_import/import/%'] = array(
+		'title' => 'Import www.wyomingregisteredagent.com Orders',
+		'page callback' => 'wysos_order_import',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.order.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['wysos/order_import/articles/%'] = array(
+		'title' => 'Import www.wyomingregisteredagent.com Orders',
+		'page callback' => 'wysos_order_import_articles',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.order.inc',
+		'type' => MENU_CALLBACK
+	);
+	$items['wysos/order_import/done/%'] = array(
+		'page callback' => 'wysos_order_import_done',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.order.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/order_import/resolutions/%'] = array(
+		'title' => 'Create Resolutions',
+		'page callback' => 'wysos_order_import_resolutions',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.order.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/order_import/delete/%'] = array(
+		'page callback' => 'wysos_order_import_delete',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.order.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/stamps/mf_user'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_stamps_mf_user_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.stamps.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/stamps/mf_shipment/%'] = array(
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_stamps_mf_shipment_form',3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.stamps.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/billing/make_renewals'] = array(
+		'title' => 'Send Client Renewal Letters',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('wysos_billing_make_renewals_form'),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.billing.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/export_users'] = array(
+		'title' => 'Export my.wyomingregisteredagent.com Users',
+		'page callback' => 'wysos_export_users',
+		'access arguments' => array('administer users'), 
+		'file' => 'wysos.admin.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/download/%/%'] = array(
+		'page callback' => 'wysos_download_file',
+		'page arguments' => array(3),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.download.inc',
+		'type' => MENU_CALLBACK,
+	);
+	$items['wysos/download/%'] = array(
+		'page callback' => 'wysos_download_page',
+		'page arguments' => array(2),
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.download.inc',
+		'type' => MENU_CALLBACK,
+	);
+	//ajax callback for state
+	$items['wysos/zone/list'] = array(
+		'title' => t('Zone List'),
+		'page callback' => 'wysos_zone_list',
+		'access arguments' => array('administer users'),
+		'file' => 'wysos.ajax.inc',
+		'type' => MENU_NORMAL_ITEM
+	);
+	
+  
+	return $items;
+
+}
+
+function wysos_init(){
+	drupal_add_js(drupal_get_path('module', 'wysos') . '/wysos.ajax.js');
+}

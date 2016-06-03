@@ -1,0 +1,203 @@
+<?php 
+
+function wysos_search($term = NULL){
+	$output = array();
+	if($term == NULL){
+		$output = drupal_get_form('wysos_search_form');
+	}else{
+	
+	$ft_term = "\"".$term."\"";
+	
+	$result = db_query("SELECT u.name, u.mail,u.uid, a.first_name, a.last_name, a.street1,a.street2, a.city, z.zone_code AS state, a.postal_code,c.country_name
+	FROM users u
+	LEFT JOIN uc_addresses a ON u.uid = a.uid
+	LEFT JOIN uc_zones z ON a.zone = z.zone_id
+	LEFT JOIN uc_countries c ON a.country = c.country_id
+	WHERE u.uid IN(SELECT uid FROM uc_addresses WHERE MATCH(first_name, last_name,company) AGAINST(:address IN BOOLEAN MODE)) OR u.uid IN(SELECT uid FROM users WHERE name LIKE :name)",array(':address'=>'%'.db_like($term),':name'=>'%'.db_like($term)))->fetchAll();
+
+	if(!$result){
+		return;
+	}
+	$attributes = array(
+		'border'      => 0,
+		'cellspacing' => 0,
+		'cellpadding' => 3
+	);
+	$header = array('Username','Customer','Email','Address');
+	foreach($result as $rows){
+		$row[]  = array(
+				'style' => 'background-color: LightGrey;',
+				'data'  => 	array(
+					array('data' => l($rows->name,'wysos/user/'.$rows->uid)),
+					array('data' => $rows->first_name.' '.$rows->last_name),
+					array('data' => $rows->mail),
+					array('data' => $rows->street1 . '<br>'. $rows->street2 .'<br>'. $rows->city.', '.$rows->state.' '.$rows->postal_code.'<br>'.$rows->country_name)
+					));
+	
+	}
+	$output = '<h2>Users</h2>';
+	$output .= theme('table', array('header'=>$header, 'rows'=>$row, 'attributes'=>$attributes));
+	//print_r($row);
+	//die();
+	// Search Orders
+		$result = db_query("SELECT uc_orders.order_id, uc_orders.uid, uc_orders.billing_company, uc_orders.billing_first_name, uc_orders.billing_last_name, 
+		uc_orders.order_status, uc_orders.order_total, (SELECT (uc_orders.order_total-SUM(uc_payment_receipts.amount)) FROM uc_payment_receipts WHERE uc_payment_receipts.order_id=uc_orders.order_id) AS balance
+		FROM uc_orders
+		WHERE uc_orders.order_id IN (SELECT order_id FROM uc_order_products WHERE MATCH(data,title)
+		AGAINST(:ft_term IN BOOLEAN MODE))", array(':ft_term'=>'%'.db_like($ft_term)))->fetchAll();
+		if (!$result) {
+			return $output;
+		}   
+		
+		// Table tag attributes
+		$attributes = array(
+		'border'      => 0,
+		'cellspacing' => 0,
+		'cellpadding' => 3
+//		'align'       => 'left'
+		);
+		$header = array('Order','Company','Customer','Status','Total','Due');
+		$row = array();
+		foreach ($result as $rows) {
+			if(!empty($rows->billing_first_name))
+				$customer_name = SUBSTR($rows->billing_first_name.' '.$rows->billing_last_name,0,12);
+			elseif(!empty($rows->shipping_first_name))
+				$customer_name = SUBSTR($rows->shipping_first_name.' '.$rows->shipping_last_name,0,12);
+			elseif(!empty($rows->shipping_company))
+				$customer_name = SUBSTR($rows->shipping_company,0,12);
+			elseif(!empty($rows->billing_company))
+				$customer_name = SUBSTR($rows->billing_company,0,12);
+			
+			$row[]  = array(
+				'style' => 'background-color: LightGrey;',
+				'data'  => 	array(
+						array('data' => l($rows->order_id, 'admin/store/orders/' . $rows->order_id)),
+						array('data' => $rows->billing_company),
+						array('data' => l($customer_name,'wysos/user/'.$rows->uid)),
+						array('data' => $rows->order_status),
+						array('data' => '$'.number_format($rows->order_total,2)),
+						array('data' => '$'.number_format($rows->balance,2))
+					));
+		} 
+		
+		// Render Table
+		$output .= '<h2>Orders</h2>';
+		$output .= theme('table', array('header'=>$header,'rows'=>$row,'attributes'=>$attributes));
+
+		// Search Companies
+		$result = db_query("SELECT c.company_name, c.filing_num, c.company_id, u.name as user_name, c.uid, c.suite_id, s.suite_no
+		FROM wra_companies c
+		INNER JOIN users u ON c.uid=u.uid
+		LEFT JOIN wra_suites s ON c.suite_id = s.suite_id
+    	WHERE MATCH(c.company_name) AGAINST (:term IN BOOLEAN MODE)
+		",array(':term'=>'%'.db_like($term)))->fetchAll();
+		if (!$result) {
+			die('Invalid query');
+		}  
+		
+		foreach($result as $rows) {
+			$row2[]  = array(
+				'style' => 'background-color: LightGrey;',
+				'data'  => 	array(
+					array('data' => $rows->company_name),
+					array('data' => $rows->filing_num),
+					array('data' => l($rows->user_name,'wysos/user/'.$rows->uid)),
+					array('data' => $rows->suite_no),
+					));
+		}
+		// Render Table
+		$output .= '<h2>Companies</h2>';
+		$header = array('Company','FILING_NUM','User','Suite');
+		$output .= theme('table', array('header'=>$header,'rows'=>$row2,'attributes'=>$attributes)); 	
+   }
+   return $output;
+}
+
+function wysos_search_form($form,&$form_state){
+	$form['term'] = array(
+		'#title' => t('Search For Term'),
+        '#type' => 'textfield',
+        '#size' => '60',
+		'#maxlength' => '254',
+        '#default_value' => '',
+	);
+	$form['submit-term'] = array (
+		'#type' => 'submit',
+		'#value' => t('Search Term')
+	);
+	$form['user_name'] = array(
+		'#title' => t('User Name'),
+        '#type' => 'textfield',
+        '#size' => '30',
+		'#maxlength' => '60',
+        '#default_value' => '',
+        '#autocomplete_path' => 'user/autocomplete',
+		'#description' => t('Please enter user name.')
+	);
+	$form['submit-user'] = array (
+		'#type' => 'submit',
+		'#value' => t('Search User')
+	);
+	$form['company_clients'] = array(
+		'#title' => t('Companies we represent'),
+        '#type' => 'textfield',
+        '#size' => '50',
+		'#maxlength' => '80',
+        '#autocomplete_path' => 'wysos/autocomplete/client_company',
+		'#description' => t('Please enter client company name.')
+	);
+	$form['submit-client-company'] = array (
+		'#type' => 'submit',
+		'#value' => t('Search Client Companies')
+	);
+	$form['company_all'] = array(
+		'#title' => t('All Wyoming companies'),
+        '#type' => 'textfield',
+        '#size' => '50',
+		'#maxlength' => '80',
+        '#autocomplete_path' => 'wysos/autocomplete/all_companies',
+		'#description' => t('Please enter Wyoming company name.')
+	);
+	$form['submit-all-company'] = array (
+		'#type' => 'submit',
+		'#value' => t('Search All Companies')
+	);
+
+	return $form; 
+
+}
+/*
+ * Submit wysos_search_form()
+ *
+ */
+function wysos_search_form_submit($form, &$form_state) {
+	switch($form_state['clicked_button']['#id'])
+	{
+		case 'edit-submit-term'	:
+			$form_state['redirect'] = 'wysos/search/' .	$form_state['values']['term'];
+			drupal_redirect_form($form_state);
+			break;
+
+		case 'edit-submit-company'	:
+			// Get uid associated with company
+			$uid = db_query("SELECT uid FROM WySosUserFiling WHERE filing_name=:filing_name UNION SELECT uid FROM wra_mail_suites WHERE company_name=:company_name",array(':filing_name'=>$form_state['values']['company_name'], ':company_name'=>$form_state['values']['company_name']))->fetchField();
+			drupal_redirect_form($form, 'wysos/user/' .$uid);
+			break;
+		
+		case 'edit-submit-user'	:
+			$uid = db_query("SELECT uid FROM users WHERE name=:name",array(':name'=>$form_state['values']['user_name']))->fetchField();
+			drupal_redirect_form($form, 'wysos/user/' .$uid);
+			break;
+
+		case 'edit-submit-client-company'	:
+			$uid = db_query("SELECT uid FROM wra_companies WHERE company_name= :company_name",array(':company_name'=>$form_state['values']['company_clients']))->fetchField();
+			drupal_redirect_form($form, 'wysos/user/' .$uid);
+			break;
+
+		case 'edit-submit-all-company'	:
+			$company_id = db_query("SELECT company_id FROM wra_search_all_companies WHERE company_name=:company_name", array(':company_name'=>$form_state['values']['company_all']))->fetchField();
+			drupal_redirect_form($form, 'wysos/company/browse/' .$company_id);
+			break;
+	};
+}
+

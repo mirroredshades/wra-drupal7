@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>OpenTBS Demo</title>
+<style type="text/css">
+<!--
+body,td,th {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 11px;
+}
+.title1 {
+	font-size: 16px;
+	font-weight: bold;
+}
+-->
+</style></head>
+
+<body>
+<p align="center"><span class="title1">OpenTBS</span> <span class="title1">demo</span><br />
+  OpenTBS is a PHP tool that merges both OpenOffice and Ms Office documents<br />
+  <br />
+</p>
+<p>OpenTBS can merge all OpenDocument (ODF) and Office Open XML (OOXML) files.<br />
+In fact it can merge any XML or Text file saved in a zip container.</p>
+<p>- No temporary files needed.<br />
+  - Output directly as download, or in a new file on the disk.<br />
+  - Works with both PHP 4 and PHP 5.<br />
+- No PHP extension required (but easier to use if <a href="http://www.php.net/manual/en/book.zlib.php">ZLib</a> is enabled) <br />
+Help file : <a href="http://www.tinybutstrong.com/plugins/opentbs/tbs_plugin_opentbs.html">tbs_plugin_opentbs.html</a></p>
+<form id="form1" name="form1" method="post" action="demo_merge.php">
+  Enter your name:
+    <input type="text" name="yourname" id="yourname" />
+  , choose a doc type :
+  <select name="tpl" id="tpl">
+    <option value="demo_oo_text.odt">OpenOffice Writer Document</option>
+    <option value="demo_oo_spreadsheet.ods">OpenOffice Calc Spreadsheet</option>
+    <option value="demo_oo_graph.odg">OpenOffice Draw Graphic</option>
+    <option value="demo_oo_formula.odf">OpenOffice Math Formula</option>
+    <option value="demo_oo_presentation.odp">OpenOffice Impress Presentation</option>
+    <option value="demo_ms_word.docx">Ms Word Document (.docx)</option>
+    <option value="demo_ms_excel.xlsx">Ms Excel SpreadSheet (.xlsx)</option>
+    <option value="demo_ms_powerpoint.pptx">Ms PowerPoint Presentation (.pptx)</option>
+  </select>
+  <input type="submit" name="btn_go" id="btn_go" value="and go" />
+</form>
+<p><br />
+  <br />
+  -&gt; 
+  See the <a href="demo_merge.php?source">source code of the PHP script.</a><br />
+  -&gt; Discover the <a href="http://www.tinybutstrong.com">TinyButStrong</a> template engine for PHP<br />
+-&gt; Go to <a href="http://www.tinybutstrong.com/plugins.php">OpenTBS download</a> page </p>
+</body>
+</html>

@@ -1,0 +1,5 @@
+name = Wysos
+description = Enable interface to Wyoming secretary of state
+package = WYSO
+version = "7.x-2.0"
+core = 7.x
